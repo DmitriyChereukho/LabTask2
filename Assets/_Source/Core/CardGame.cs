@@ -12,9 +12,11 @@ namespace _Source.Core
     {
         private static CardGame _instance;
 
-        public int LayoutsCount;
-
         private Dictionary<CardInstance, CardView> _cardDictionary = new();
+        
+        public int PlayerCount;
+
+        public int HandCapacity;
         
         public List<CardAsset> initialCards;
         
@@ -36,20 +38,31 @@ namespace _Source.Core
         private void Start()
         {
             StartGame();
+            
+            StartTurn();
         }
 
         private void StartGame()
         {
-            for (int i = 0; i < LayoutsCount; i++)
+            for (int i = 0; i < PlayerCount; i++)
             {
-                foreach (var cardAsset in initialCards)
+                for (int j = 0; j < initialCards.Count; j++)
                 {
-                    CardInstance cardInstance = CreateCard(cardAsset);
+                    CardInstance cardInstance = CreateCard(initialCards[j]);
                 
                     CreateCardView(cardInstance);
                     
-                    cardInstance.MoveToLayout(i);
                 }
+            }
+        }
+        
+        private void StartTurn()
+        {
+            int i = 0;
+            foreach (var cardInstance in _cardDictionary.Keys)
+            {
+                cardInstance.MoveToLayout(i / HandCapacity);
+                cardInstance.CardPosition = i++ % HandCapacity;
             }
         }
 
@@ -66,19 +79,45 @@ namespace _Source.Core
             _cardDictionary.Add(cardInstance, cardViewObject);
         }
         
-        public List<CardView> GetCardInLayout(int layoutId)
+        public List<CardInstance> GetCardInLayout(int layoutId)
         {
-            List<CardView> cardViews = new();
+            List<CardInstance> cardInstances = new();
             
-            foreach (var card in _cardDictionary)
+            foreach (var cardInstance in _cardDictionary.Keys)
             {
-                if (card.Key.GetLayoutId() == layoutId)
+                if (cardInstance.GetLayoutId() == layoutId)
                 {
-                    cardViews.Add(card.Value);
+                    cardInstances.Add(cardInstance);
                 }
             }
 
-            return cardViews;
+            return cardInstances;
+        }
+
+        public CardView GetCardView(CardInstance cardInstance)
+        {
+            return _cardDictionary[cardInstance];
+        }
+        
+        public void RecalculateLayout(int layoutId)
+        {
+            int i = 0;
+            foreach (var cardInstance in GetCardInLayout(layoutId))
+            {
+                cardInstance.CardPosition = i++;
+            }
+        }
+        
+        public void ShuffleLayout(int layoutId)
+        {
+            List<CardInstance> cardInstances = GetCardInLayout(layoutId);
+            
+            for (int i = 0; i < cardInstances.Count - 1; i++)
+            {
+                int randomIndex = Random.Range(i + 1, cardInstances.Count);
+                
+                (cardInstances[i].CardPosition, cardInstances[randomIndex].CardPosition) = (cardInstances[randomIndex].CardPosition, cardInstances[i].CardPosition);
+            }
         }
     }
 }
