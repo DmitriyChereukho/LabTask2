@@ -1,5 +1,6 @@
 ﻿using System;
 using _ScriptableObjects;
+using _Source.Core;
 
 namespace _Source.Models
 {
@@ -16,7 +17,10 @@ namespace _Source.Models
 
         public void MoveToLayout(int layoutId)
         {
+            int previousLayoutId = _layoutId;
             _layoutId = layoutId;
+            CardGame.Instance.RecalculateLayout(_layoutId);
+            CardGame.Instance.RecalculateLayout(previousLayoutId);
         }
         
         public int GetLayoutId()

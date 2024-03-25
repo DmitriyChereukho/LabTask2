@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e38ee149f0bf4bcd8d979b821870589b, type: 3}
   m_Name: GothicCard3
   m_EditorClassIdentifier: 
-  cardName: 
+  cardName: GothicQueen3
   cardColor: {r: 0, g: 0, b: 0, a: 0}
   cardImage: {fileID: 21300000, guid: 4a48a3f8dc4eae442a3c9ff41275309b, type: 3}
   cardBack: {fileID: 21300000, guid: e5275e3367305834ab8f4543e0392bdb, type: 3}

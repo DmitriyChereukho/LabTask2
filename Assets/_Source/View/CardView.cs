@@ -19,12 +19,22 @@ namespace _Source.View
         {
             _cardInstance = cardInstance;
             
+            gameObject.name = cardInstance.Asset.cardName;
+            
             _cardImage.sprite = cardInstance.Asset.cardImage;
-            //_cardImage.color = cardInstance.Asset.cardColor;
             
             _cardBack.sprite = cardInstance.Asset.cardBack;
-            //_cardBack.color = cardInstance.Asset.cardColor;
         }
         
+        public void Rotate(bool isViewed)
+        {
+            _cardImage.gameObject.SetActive(isViewed);
+        }
+
+       public void PlayCard()
+        {
+            //throw new System.NotImplementedException();
+            _cardInstance.MoveToLayout(2);
+        }
     }
 }
